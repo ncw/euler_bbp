@@ -1,0 +1,551 @@
+\documentclass[11pt]{article}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{latexsym,amsfonts,amsthm,amsmath,amssymb}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{tabularx,graphicx}
+
+% Theorem environments:
+\newtheorem{Thm}{Theorem}
+\newtheorem{Cor}{Corollary}
+\newtheorem{Def}{Definition}
+\newtheorem{Prop}{Proposition}
+\newtheorem{Claim}{Claim}
+\newtheorem{Lemma}{Lemma}
+
+% Formatting:
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\thefootnote}{\alph{footnote}}
+\parindent=0.25in
+\setlength{\parsep}{30pt}
+\pagestyle{empty}
+
+%% \documentclass{article}
+%% \usepackage{amsmath}
+%% \title{Euler found the first BBP formula in 1779}
+%% \author{Nick Craig-Wood}
+%% \date{\today}
+
+%% \begin{document}
+%% \maketitle
+
+\begin{document}
+
+\begin{center}
+{\LARGE Euler found the first binary digit extraction formula for $\pi$ in 1779} \\
+
+\bigskip\bigskip
+
+%{Nick Craig-Wood \\ {\tt nick@craig-wood.com}}
+{AUTHOR NAME \\ {\tt author@example.com}}
+
+\end{center}
+
+\medskip
+
+\begin{abstract}\noindent
+In 1779 Euler discovered two formulas for $\pi$ which can be used to calculate any binary digit of $\pi$ without calculating the previous digits. Up until now it was believed that the first formula with the correct properties (known as a BBP-type formula) for this calculation was published by Bailey, Borwein and Plouffle in 1997.
+\end{abstract}
+
+\medskip
+
+\section{Introduction}
+
+In 1997 Bailey, Borwein and Plouffle published their paper \cite{BBP} demonstrating how to calculate any binary or hexadecimal digit of $\pi$ without calculating the previous digits. Remarkably this algorithm needs constant space and runs in $O(n \log{n})$ time making it extremely practical.
+
+The calculation revolves about this equation which was discovered using a computer aided search using the integer relation algorithm PSLQ.
+
+\begin{equation}   \label{eq:originalbbp}
+  \pi = \sum_{n = 0}^\infty \left[ \frac{1}{16^n} \left( \frac{4}{8n + 1} - \frac{2}{8n + 4} - \frac{1}{8n + 5} - \frac{1}{8n + 6} \right) \right]
+\end{equation}
+
+This style of equation is now known as a BBP-type formula.
+
+What the authors didn't know is that Leonhard Euler (1707-1783) discovered two BBP-type formulas which would have worked just as well as the formula that they spent a lot of computer time searching for.
+
+Euler's 1779 paper \emph{``De novo genere serierum rationalium et valde convergentium quibus ratio peripheriae ad diametrum exprimi potest''} \cite{E706latin} (E706) 
+has been translated by Jordan Bell with the English title \emph{``On a new type of rational and highly convergent series, by which the ratio of the circumference to the diameter is able to be expressed''} \cite{E706en} contains the formulas. If you wish to read more about the history of this paper then Ed Sandifer \cite{Sandifer} wrote a nice article about it.
+
+It isn't immediately obvious what the BBP-type formula is as Euler left the formula in expanded form:
+
+\begin{equation*}
+  \pi = \left \{
+  \begin{aligned}
+     2  &( 1            &- \tfrac{1}{5}\cdot\tfrac{1}{4} &&+ \tfrac{1}{9}\cdot\tfrac{1}{4^2}  &&- \tfrac{1}{13}\cdot\tfrac{1}{4^3} &&+ \tfrac{1}{17}\cdot\tfrac{1}{4^4} &&- etc. ) \\
+    + 1 &( 1            &- \tfrac{1}{3}\cdot\tfrac{1}{4} &&+ \tfrac{1}{5}\cdot\tfrac{1}{4^2}  &&- \tfrac{1}{7}\cdot\tfrac{1}{4^3}  &&+ \tfrac{1}{9}\cdot\tfrac{1}{4^4}  &&- etc. ) \\
+    + 1 &( \tfrac{1}{3} &- \tfrac{1}{7}\cdot\tfrac{1}{4} &&+ \tfrac{1}{11}\cdot\tfrac{1}{4^2} &&- \tfrac{1}{15}\cdot\tfrac{1}{4^3} &&+ \tfrac{1}{19}\cdot\tfrac{1}{4^4} &&- etc. )
+  \end{aligned}
+  \right.
+\end{equation*}
+
+But in more compact notation it is this, where the similarities to equation~\eqref{eq:originalbbp} are immediately apparent.
+
+\begin{equation}  \label{eq:eulerbbp}
+  \pi = \sum_{n = 0}^\infty \left[ \frac{(-1)^n}{4^n} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
+\end{equation}
+
+This was independently discovered by Adamchik and Wagon \cite{Adamchik_Wagon_1997} in 1997.
+
+Euler also produced this formula \footnote{Note that this equation is incorrect in the original paper and the translation - the bottom left term is printed as $1$ whereas it should be $\frac{1}{3}$ as shown here.}:
+
+\begin{equation*}
+  \pi = \left \{
+%  \begin{array}{@{}r@{}r@{}r@{}r@{}r@{}r}
+  \begin{aligned}
+%  \begin{alignedat}{8}
+    %% &+ & 2            &( 1            &-& \tfrac{1}{5}&\cdot&\tfrac{1}{64}   &+&& \tfrac{1}{9} &\cdot&&\tfrac{1}{64^2}   &-&& \tfrac{1}{13}&\cdot&&\tfrac{1}{64^3}   &- etc. ) \\
+    %% &+& \tfrac{1}{2}  &( 1            &-& \tfrac{1}{3}&\cdot&\tfrac{1}{64}   &+&& \tfrac{1}{5} &\cdot&&\tfrac{1}{64^2}   &-&& \tfrac{1}{7} &\cdot&&\tfrac{1}{64^3}   &- etc. ) \\
+    %% &+& \tfrac{1}{4}  &( \tfrac{1}{3} &-& \tfrac{1}{7}&\cdot&\tfrac{1}{64}   &+&& \tfrac{1}{11}&\cdot&&\tfrac{1}{64^2}   &-&& \tfrac{1}{15}&\cdot&&\tfrac{1}{64^3}   &- etc. ) \\
+    %% &+& \tfrac{1}{2}  &( 1            &-& \tfrac{1}{5}&\cdot&\tfrac{1}{1024} &+&& \tfrac{1}{9} &\cdot&&\tfrac{1}{1024^2} &-&& \tfrac{1}{13}&\cdot&&\tfrac{1}{1024^3} &- etc. ) \\
+    %% &+& \tfrac{1}{16} &( 1            &-& \tfrac{1}{3}&\cdot&\tfrac{1}{1024} &+&& \tfrac{1}{5} &\cdot&&\tfrac{1}{1024^2} &-&& \tfrac{1}{7} &\cdot&&\tfrac{1}{1024^3} &- etc. ) \\
+    %% &+& \tfrac{1}{64} &( \tfrac{1}{3} &-& \tfrac{1}{7}&\cdot&\tfrac{1}{1024} &+&& \tfrac{1}{11}&\cdot&&\tfrac{1}{1024^2} &-&& \tfrac{1}{15}&\cdot&&\tfrac{1}{1024^3} &- etc. )
+     2              &( 1            &- \tfrac{1}{5}\cdot\tfrac{1}{64}   &&+ \tfrac{1}{9}\cdot\tfrac{1}{64^2}    &&- \tfrac{1}{13}\cdot\tfrac{1}{64^3}   &&- etc. ) \\
+    + \tfrac{1}{2}  &( 1            &- \tfrac{1}{3}\cdot\tfrac{1}{64}   &&+ \tfrac{1}{5}\cdot\tfrac{1}{64^2}    &&- \tfrac{1}{7}\cdot\tfrac{1}{64^3}    &&- etc. ) \\
+    + \tfrac{1}{4}  &( \tfrac{1}{3} &- \tfrac{1}{7}\cdot\tfrac{1}{64}   &&+ \tfrac{1}{11}\cdot\tfrac{1}{64^2}   &&- \tfrac{1}{15}\cdot\tfrac{1}{64^3}   &&- etc. ) \\
+    + \tfrac{1}{2}  &( 1            &- \tfrac{1}{5}\cdot\tfrac{1}{1024} &&+ \tfrac{1}{9}\cdot\tfrac{1}{1024^2}  &&- \tfrac{1}{13}\cdot\tfrac{1}{1024^3} &&- etc. ) \\
+    + \tfrac{1}{16} &( 1            &- \tfrac{1}{3}\cdot\tfrac{1}{1024} &&+ \tfrac{1}{5}\cdot\tfrac{1}{1024^2}  &&- \tfrac{1}{7}\cdot\tfrac{1}{1024^3}  &&- etc. ) \\
+    + \tfrac{1}{64} &( \tfrac{1}{3} &- \tfrac{1}{7}\cdot\tfrac{1}{1024} &&+ \tfrac{1}{11}\cdot\tfrac{1}{1024^2} &&- \tfrac{1}{15}\cdot\tfrac{1}{1024^3} &&- etc. )
+%  \end{alignedat}
+  \end{aligned}
+%  \end{array}
+  \right.
+\end{equation*}
+
+This can be written like this with a bit of effort which will be described below.
+
+\begin{equation}  \label{eq:eulerbbp2}
+\begin{split}
+  \pi
+  = \frac{1}{2^{26}} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    & \frac{2^{27}}{20n+1}
+    + \frac{2^{25}}{12n+1}
+    + \frac{2^{25}}{10n+1}
+    + \frac{2^{24}}{20n+3}
+    + \frac{2^{22}}{6n+1} \\
+    &- \frac{2^{20}}{60n+15}
+    - \frac{2^{19}}{10n+3}
+    - \frac{2^{18}}{20n+7}
+    - \frac{2^{15}}{12n+5} \\
+    &+ \frac{2^{15}}{20n+9}
+    + \frac{2^{12}}{30n+15}
+    + \frac{2^{12}}{20n+11}
+    - \frac{2^{10}}{12n+7} \\
+    &- \frac{2^{9}}{20n+13} 
+    - \frac{2^{7}}{10n+7}
+    - \frac{2^{5}}{60n+45}
+    + \frac{2^{3}}{20n+17} \\
+    &+ \frac{2^{2}}{6n+5}
+    + \frac{2}{10n+9}
+    + \frac{1}{12n+11}
+    + \frac{1}{20n+19}
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+This is clearly a BBP-type formula and it was independently discovered by Pschill \cite{Arndt2001} in 1999.
+
+\section{Euler's Derivation of Equation (\ref{eq:eulerbbp})}
+
+Here is how Euler derived equation~\eqref{eq:eulerbbp} revised into modern notation. Starting from the observation $x^4 + 4 = (x^2 + 2x + x)(x^2 - 2x + x)$, Euler produced:
+
+\begin{align}
+\int_0^x \frac{x^2 + 2x + x}{x^4 + 4} \,dx \label{eq:integral}
+&= \int_0^x \frac{dx}{x^2 - 2x + x} \\
+%&= \left[ \arctan{(1-x)} \right]_0^x \\
+&= \arctan{(1-x)} - \arctan{1} \\
+&= \arctan{\frac{x}{2-x}} \label{eq:rhs}
+\end{align}
+
+%% Using the trig identity
+
+%% \begin{equation} \label{eq:arctan}
+%% \arctan{x} + \arctan{y} = \arctan{\frac{x + y}{1 - xy}}
+%% \end{equation}
+
+%% Euler then produced
+
+%% \begin{align} \label{eq:rhs}
+%% \int_0^x \frac{x^2 + 2x + x}{x^4 + 4} \,dx
+%% &= \arctan{\frac{x}{2-x}}
+%% \end{align}
+
+%% (Euler actually went straight from equation \eqref{eq:integral} to this result presumably using some previous knowledge.)
+
+Euler then went to work on the left hand side of this equation expanding $\frac{x^k}{x^4 + 4}$ where $k$ is an integer as an infinite series by polynomial division.)
+
+\begin{align}
+  \frac{x^k}{x^4 + 4}
+  &= \sum_{n = 0}^\infty (-1)^n \frac{x^{4n+k}}{4^{n+1}}
+\end{align}
+
+Integrating this we get
+
+\begin{align}
+  \int_0^x \frac{x^k}{x^4 + 4} \, dx
+  &= \int_0^x \sum_{n = 0}^\infty (-1)^n \frac{x^{4n+k}}{4^{n+1}} \, dx \\
+  &= \sum_{n = 0}^\infty (-1)^n \frac{x^{4n+k+1}}{(4n+k+1)4^{n+1}}
+\end{align}
+
+We can now rewrite the LHS of equation~\eqref{eq:rhs} as
+
+\begin{align}
+  \int_0^x \frac{x^2 + 2x + x}{x^4 + 4} \,dx
+  &= \int_0^x \frac{x^2}{x^4 + 4} \,dx
+    + \int_0^x \frac{2x}{x^4 + 4} \,dx
+    + \int_0^x \frac{x}{x^4 + 4} \,dx \\
+  &= \sum_{n = 0}^\infty \frac{(-1)^n}{4^{n+1}} \left[ \label{eq:lhs}
+    \frac{2x^{4n+1}}{4n+1}
+    + \frac{2x^{4n+2}}{4n+2}
+    + \frac{x^{4n+3}}{4n+3}
+  \right]
+\end{align}
+
+Equating equation~\eqref{eq:lhs} and equation~\eqref{eq:rhs} Euler produced this infinite series for $\arctan{\frac{x}{2-x}}$:
+
+\begin{align} \label{eq:arctanseries}
+  \arctan{\frac{x}{2-x}}
+  &= \sum_{n = 0}^\infty \frac{(-1)^n}{4^{n+1}} \left[
+    \frac{2x^{4n+1}}{4n+1}
+    + \frac{2x^{4n+2}}{4n+2}
+    + \frac{x^{4n+3}}{4n+3}
+  \right]
+\end{align}
+
+Euler then substituted $x = 1$ to produce $\arctan{1} = \frac{\pi}{4}$ to create the BBP-type equation \eqref{eq:eulerbbp} directly.
+
+\section{Euler's Derivation of Equation (\ref{eq:eulerbbp2})}
+
+Euler obviously realised that equation~\eqref{eq:arctanseries} had more to give in terms of $\pi$ generating sequences. Equation~\eqref{eq:eulerbbp} generates roughly 4 bits of $\pi$ or $1.2$ decimal digits per iteration. To do better he took this identity that was first discovered by Hutton \cite{Arndt2001} in 1776:
+
+\begin{equation}
+\pi = 8 \arctan{\tfrac{1}{3}} + 4 \arctan{\tfrac{1}{7}}
+\end{equation}
+
+He then used equation \eqref{eq:arctanseries} with $x=\frac{1}{2}$ and $x=\frac{1}{4}$ to give series for $\arctan{\frac{1}{3}}$ and $\arctan{\frac{1}{7}}$ respectively. Combining them Euler got.
+
+\iffalse                        %commented working
+
+\begin{equation}
+\begin{split}
+  \pi
+  &= 8 \sum_{n = 0}^\infty \frac{(-1)^n}{4^{n+1}} \left[
+    \frac{2(\frac{1}{2})^{4n+1}}{4n+1}
+    + \frac{2(\frac{1}{2})^{4n+2}}{4n+2}
+    + \frac{(\frac{1}{2})^{4n+3}}{4n+3}
+  \right] \\
+  &+ 4 \sum_{n = 0}^\infty \frac{(-1)^n}{4^{n+1}} \left[
+    \frac{2(\frac{1}{4})^{4n+1}}{4n+1}
+    + \frac{2(\frac{1}{4})^{4n+2}}{4n+2}
+    + \frac{(\frac{1}{4})^{4n+3}}{4n+3}
+  \right]
+\end{split}
+\end{equation}
+
+Which with a bit of simplification becomes
+
+\fi                             %commented working
+
+\begin{equation}
+\begin{aligned}
+  \pi
+  &&=&& \frac{1}{4} &\sum_{n = 0}^\infty \frac{(-1)^n}{64^n} \left[
+    \frac{8}{4n+1}
+    + \frac{4}{4n+2}
+    + \frac{1}{4n+3}
+  \right] \\
+  &&+&& \frac{1}{64} &\sum_{n = 0}^\infty \frac{(-1)^n}{1024^n} \left[
+    \frac{32}{4n+1}
+    + \frac{8}{4n+2}
+    + \frac{1}{4n+3}
+  \right]
+\end{aligned}
+\end{equation}
+
+This was as far as Euler went. You can clearly see it is a BBP-type formula, but it isn't in the form we expect to see yet.
+
+To make it into the expected form, we can collect groups of terms (5 for the first sum, 3 for the second) to get a common multiplier of $\frac{(-1)^n}{2^{30n}}$ and lots of simplification later this becomes equation \eqref{eq:eulerbbp2}.
+
+\iffalse                        % working commented out
+
+\begin{equation}
+\begin{split}
+  \pi
+  &= \frac{1}{4} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{2^{-2}.8}{20n+1}
+    +  \frac{2^{-2}.4}{20n+2}
+    +  \frac{2^{-2}.1}{20n+3} \\
+    -& \frac{2^{-2}.8.2^{-6}}{20n+5}
+    -  \frac{2^{-2}.4.2^{-6}}{20n+6}
+    -  \frac{2^{-2}.1.2^{-6}}{20n+7} \\
+    +& \frac{2^{-2}.8.2^{-12}}{20n+9}
+    +  \frac{2^{-2}.4.2^{-12}}{20n+10}
+    +  \frac{2^{-2}.1.2^{-12}}{20n+11} \\
+    -& \frac{2^{-2}.8.2^{-18}}{20n+13} 
+    -  \frac{2^{-2}.4.2^{-18}}{20n+14}
+    -  \frac{2^{-2}.1.2^{-18}}{20n+15} \\
+    +& \frac{2^{-2}.8.2^{-24}}{20n+17}
+    +  \frac{2^{-2}.4.2^{-24}}{20n+18}
+    +  \frac{2^{-2}.1.2^{-24}}{20n+19} \\
+    \end{aligned}
+  \right] \\
+  &+ \frac{1}{64} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{2^{-6}.32}{12n+1}
+    +  \frac{2^{-6}.8}{12n+2}
+    +  \frac{2^{-6}.1}{12n+3} \\
+    -& \frac{2^{-6}.32.2^{-10}}{12n+5}
+    -  \frac{2^{-6}.8.2^{-10}}{12n+6}
+    -  \frac{2^{-6}.1.2^{-10}}{12n+7} \\
+    +& \frac{2^{-6}.32.2^{-20}}{12n+9}
+    +  \frac{2^{-6}.8.2^{-20}}{12n+10}
+    +  \frac{2^{-6}.1.2^{-20}}{12n+11} \\
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+  \pi
+  &= \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{2^{1}}{20n+1}
+    +  \frac{2^{0}}{20n+2}
+    +  \frac{2^{-2}}{20n+3} \\
+    -& \frac{2^{1}.2^{-6}}{20n+5}
+    -  \frac{2^{0}.2^{-6}}{20n+6}
+    -  \frac{2^{-2}.2^{-6}}{20n+7} \\
+    +& \frac{2^{1}.2^{-12}}{20n+9}
+    +  \frac{2^{0}.2^{-12}}{20n+10}
+    +  \frac{2^{-2}.2^{-12}}{20n+11} \\
+    -& \frac{2^{1}.2^{-18}}{20n+13} 
+    -  \frac{2^{0}.2^{-18}}{20n+14}
+    -  \frac{2^{-2}.2^{-18}}{20n+15} \\
+    +& \frac{2^{1}.2^{-24}}{20n+17}
+    +  \frac{2^{0}.2^{-24}}{20n+18}
+    +  \frac{2^{-2}.2^{-24}}{20n+19} \\
+    +&  \frac{2^{yes-1}}{12n+1}
+    +  \frac{2^{-3}}{12n+2}
+    +  \frac{2^{-6}}{12n+3} \\
+    -& \frac{2^{-1}.2^{-10}}{12n+5}
+    -  \frac{2^{-3}.2^{-10}}{12n+6}
+    -  \frac{2^{-6}.2^{-10}}{12n+7} \\
+    +& \frac{2^{-1}.2^{-20}}{12n+9}
+    +  \frac{2^{-3}.2^{-20}}{12n+10}
+    +  \frac{2^{-6}.2^{-20}}{12n+11} \\
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+  \pi
+  &= \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{2^{1}}{20n+1}
+    +  \frac{2^{-1}}{10n+1}
+    +  \frac{2^{-2}}{20n+3} \\
+    -& \frac{2^{-5}}{20n+5}
+    -  \frac{2^{-7}}{10n+3}
+    -  \frac{2^{-8}}{20n+7} \\
+    +& \frac{2^{-11}}{20n+9}
+    +  \frac{2^{-13}}{10n+5}
+    +  \frac{2^{-14}}{20n+11} \\
+    -& \frac{2^{-17}}{20n+13} 
+    -  \frac{2^{-19}}{10n+7}
+    -  \frac{2^{-20}}{20n+15} \\
+    +& \frac{2^{-23}}{20n+17}
+    +  \frac{2^{-25}}{10n+9}
+    +  \frac{2^{-26}}{20n+19} \\
+    +&  \frac{2^{-1}}{12n+1}
+    +  \frac{2^{-4}}{6n+1}
+    +  \frac{2^{-6}}{12n+3} \\
+    -& \frac{2^{-11}}{12n+5}
+    -  \frac{2^{-14}}{6n+3}
+    -  \frac{2^{-16}}{12n+7} \\
+    +& \frac{2^{-21}}{12n+9}
+    +  \frac{2^{-24}}{6n+5}
+    +  \frac{2^{-26}}{12n+11} \\
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+  \pi
+  &= \frac{1}{2^{26}} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{2^{27}}{20n+1}
+    +  \frac{2^{25}}{10n+1}
+    +  \frac{2^{24}}{20n+3} \\
+    -& \frac{2^{21}}{20n+5}
+    -  \frac{2^{19}}{10n+3}
+    -  \frac{2^{18}}{20n+7} \\
+    +& \frac{2^{15}}{20n+9}
+    +  \frac{2^{13}}{10n+5}
+    +  \frac{2^{12}}{20n+11} \\
+    -& \frac{2^{9}}{20n+13} 
+    -  \frac{2^{7}}{10n+7}
+    -  \frac{2^{6}}{20n+15} \\
+    +& \frac{2^{3}}{20n+17}
+    +  \frac{2^{1}}{10n+9}
+    +  \frac{2^{0}}{20n+19} \\
+    +&  \frac{2^{25}}{12n+1}
+    +  \frac{2^{22}}{6n+1}
+    +  \frac{2^{20}}{12n+3} \\
+    -& \frac{2^{15}}{12n+5}
+    -  \frac{2^{12}}{6n+3}
+    -  \frac{2^{10}}{12n+7} \\
+    +& \frac{2^{5}}{12n+9}
+    +  \frac{2^{2}}{6n+5}
+    +  \frac{2^{0}}{12n+11} \\
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+  \pi
+  &= \frac{1}{2^{26}} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{2^{27}}{20n+1}
+    +  \frac{2^{25}}{10n+1}
+    +  \frac{2^{24}}{20n+3} \\
+    -& \frac{2^{20}}{60n+15}
+    -  \frac{2^{19}}{10n+3}
+    -  \frac{2^{18}}{20n+7} \\
+    +& \frac{2^{15}}{20n+9}
+    +  \frac{2^{12}}{30n+15}
+    +  \frac{2^{12}}{20n+11} \\
+    -& \frac{2^{9}}{20n+13} 
+    -  \frac{2^{7}}{10n+7}
+    -  \frac{2^{5}}{60n+45} \\
+    +& \frac{2^{3}}{20n+17}
+    +  \frac{2^{1}}{10n+9}
+    +  \frac{2^{0}}{20n+19} \\
+    +& \frac{2^{25}}{12n+1}
+    +  \frac{2^{22}}{6n+1}
+    -& \frac{2^{15}}{12n+5}
+    -  \frac{2^{10}}{12n+7} \\
+    +& \frac{2^{2}}{6n+5}
+    +  \frac{2^{0}}{12n+11} \\
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+  \pi
+  = \frac{1}{2^{26}} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    & \frac{2^{27}}{20n+1}
+    + \frac{2^{25}}{12n+1}
+    + \frac{2^{25}}{10n+1}
+    + \frac{2^{24}}{20n+3}
+    + \frac{2^{22}}{6n+1} \\
+    &- \frac{2^{20}}{60n+15}
+    - \frac{2^{19}}{10n+3}
+    - \frac{2^{18}}{20n+7}
+    - \frac{2^{15}}{12n+5} \\
+    &+ \frac{2^{15}}{20n+9}
+    + \frac{2^{12}}{30n+15}
+    + \frac{2^{12}}{20n+11}
+    - \frac{2^{10}}{12n+7} \\
+    &- \frac{2^{9}}{20n+13} 
+    - \frac{2^{7}}{10n+7}
+    - \frac{2^{5}}{60n+45}
+    + \frac{2^{3}}{20n+17} \\
+    &+ \frac{2^{2}}{6n+5}
+    + \frac{2}{10n+9}
+    + \frac{1}{12n+11}
+    + \frac{1}{20n+19}
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+\fi                             % working commented out
+
+This formula calculates 30 bits of $\pi$ per iteration or about 9 decimal places. For binary digit extraction purposes it is about $1.42\times$ faster than equation~\eqref{eq:originalbbp} as it calculates $30/21 = 1.42$ bits of $\pi$ per division as compared to $4/4 = 1$ bit of $\pi$ per division for the original equation.
+
+\section{Calculating binary digits of $\pi$}
+
+The secret to calculating the $m$-th binary digit of $\pi$ without calculating the previous digits is to multiply equation~\eqref{eq:eulerbbp} by $2^m$ and to calculate the fractional parts only which we will denote as $\pmod 1$ arithmetic. Printing this fractional result as a binary or hexadecimal floating point number will reveal the $m$-th binary digit of $\pi$ and some following digits.
+
+\begin{equation}
+  2^m \pi = \left[
+    \begin{aligned}
+      \sum_{n = 0}^{m/2} \left[ (-1)^n 2^{m-2n} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right] \\
+      + \sum_{n = m/2+1}^\infty \left[ \frac{(-1)^n}{2^{2n-m}} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
+    \end{aligned}
+    \right] \pmod 1
+\end{equation}
+
+The second half of this equation is easy to calculate as the absolute value of all terms is less than 1 and very quickly these will become so small that we don't need to worry about them. $p_f/2$ terms will be sufficient for a floating point number with precision $p_f$.
+
+The first half looks looks more difficult to calculate at first glance due to the large powers involved, however we can use modular arithmetic to calculate this as:
+
+\begin{equation}
+  2^m \pi \approx \left[
+    \begin{aligned}
+      &\sum_{n = 0}^{m/2} \left[ (-1)^n \left(
+        \begin{aligned}
+          && \frac{2^{m-2n+1} \pmod{4n + 1}}{4n + 1} \\
+          &&+ \frac{2^{m-2n+1} \pmod{4n + 2}}{4n + 2} \\
+          &&+ \frac{2^{m-2n} \pmod{4n + 3}}{4n + 3}
+        \end{aligned}
+        \right) \right] \\
+      &+ \sum_{n = m/2+1}^{m/2+p_f/2} \left[ \frac{(-1)^n}{4^{n-m}} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
+\end{aligned}
+    \right] \pmod 1
+\end{equation}
+
+All parts of this equation are now computable using normal floating point numbers of precision $p_f$ bits and integers of precision $p_i$ bits. $2^x \pmod k$ can easily be computed using only $O(\log{n})$ operations \cite{Knuth_1995} using an integer of sufficient size to hold $k$.
+
+There are two limits to the accuracy of this equation. Firstly we need the maximum denominator to fit into $p_i$ bits this means that $4(m/2)+3 < 2^{p_i}$ so $m < 2^{p_i-1}-1.5$. Secondly each time we add a floating point number we will, on average, add half a bit of inaccuracy to the result. This equation needs 3 additions per iteration so our final computed result will only have accuracy approximately $p_f - \log_2{(3(m/2)/2)} = p_f - log_2(3m/4)$ bits.
+
+\section{Computation}
+
+A program to calculate hex digits of $\pi$ was written based on equation~\eqref{eq:originalbbp}, \eqref{eq:eulerbbp} and \eqref{eq:eulerbbp2} using 64 bit integers ($p_i = 64$) and double precision floating point ($p_f = 53$). On the author's laptop this was the result of the computation showing the $10^{m}$-th hex digits of $\pi$ and the time it took to calculate them using each equation.
+
+\begin{center}
+  \begin{tabular}{|l|l|r|r|r|}
+    \hline
+Digit & Hex Result & Equation~\eqref{eq:originalbbp} & Equation~\eqref{eq:eulerbbp} & Equation~\eqref{eq:eulerbbp2} \\ \hline
+$10^{1}$ & \texttt{5A308D31319} & 31.1{\textmu}s & 33.0{\textmu}s & 33.0{\textmu}s \\
+$10^{2}$ & \texttt{C29B7C97C50} & 37.6{\textmu}s & 61.3{\textmu}s & 33.9{\textmu}s \\
+$10^{3}$ & \texttt{349F1C09B0} & 231{\textmu}s & 342{\textmu}s & 127{\textmu}s \\
+$10^{4}$ & \texttt{68AC8FCFB} & 2.23ms & 3.36ms & 1.45ms \\
+$10^{5}$ & \texttt{535EA16C} & 27.0ms & 21.5ms & 17.0ms \\
+$10^{6}$ & \texttt{26C65E52} & 57.8ms & 83.0ms & 162.5ms \\
+$10^{7}$ & \texttt{17AF586} & 476ms & 707ms & 392ms \\
+$10^{8}$ & \texttt{ECB840} & 5.95s & 8.93s & 4.07s \\
+$10^{9}$ & \texttt{85895} & 66.7s & 100.5s & 44.6s \\
+$10^{10}$ & \texttt{921C} & 12m56s & 19m38s & 8m53s \\
+$10^{11}$ & \texttt{C9C} & 2h28m &3h43m & 1h37m \\
+    \hline
+  \end{tabular}
+\end{center}
+
+It can be seen here that Equation~\eqref{eq:eulerbbp2} is $1.42\times$ faster than Equation~\eqref{eq:originalbbp} as expected, but Equation~\eqref{eq:eulerbbp} is $1.5\times$ slower.
+
+The program which generated this can be downloaded from the website for this article \cite{Github}.
+
+\section{Conclusion}
+
+Euler noted about equation~\eqref{eq:eulerbbp2} \emph{This occurs as most noteworthy, because all these series proceed only by powers of two.}, and it is indeed this property which enables its use as a binary digit extraction formula for $\pi$. Euler did not make the leap to note that this formula could be used for binary digit extraction - that was Bailey, Borwein and Plouffle's stroke of genius - but amazingly he did find two formulas of the right form 200 years earlier.
+
+\bibliographystyle{plain}
+\bibliography{refs} % References are in the refs.bib file
+
+\end{document}
