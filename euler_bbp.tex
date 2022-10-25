@@ -34,42 +34,45 @@
 
 \begin{document}
 
+%\iffalse                        %comment out for review
+
 \begin{center}
 {\LARGE Euler found the first binary digit extraction formula for $\pi$ in 1779} \\
 
 \bigskip\bigskip
 
-%{Nick Craig-Wood \\ {\tt nick@craig-wood.com}}
-{AUTHOR NAME \\ {\tt author@example.com}}
+{Nick Craig-Wood \\ {\tt nick@craig-wood.com}}
 
 \end{center}
 
 \medskip
 
 \begin{abstract}\noindent
-In 1779 Euler discovered two formulas for $\pi$ which can be used to calculate any binary digit of $\pi$ without calculating the previous digits. Up until now it was believed that the first formula with the correct properties (known as a BBP-type formula) for this calculation was published by Bailey, Borwein and Plouffle in 1997.
+In 1779 Euler discovered two formulas for $\pi$ which can be used to calculate any binary digit of $\pi$ without calculating the previous digits. Up until now it was believed that the first formula with the correct properties (known as a BBP-type formula) for this calculation was published by Bailey, Borwein and Plouffe in 1997.
 \end{abstract}
 
 \medskip
 
+%\fi                        %comment out for review
+
 \section{Introduction}
 
-In 1997 Bailey, Borwein and Plouffle published their paper \cite{BBP} demonstrating how to calculate any binary or hexadecimal digit of $\pi$ without calculating the previous digits. Remarkably this algorithm needs constant space and runs in $O(n \log{n})$ time making it extremely practical.
+In 1997 Bailey, Borwein and Plouffe published their paper \cite{BBP} demonstrating how to calculate any binary or hexadecimal digit of $\pi$ without calculating the previous digits. Remarkably this algorithm needs constant space and runs in $O(n \log{n})$ time making it extremely practical.
 
-The calculation revolves about this equation which was discovered using a computer aided search using the integer relation algorithm PSLQ.
+The calculation revolves about this equation which was discovered using a computer-aided search using the integer relation algorithm PSLQ \cite{PSLQ}.
 
 \begin{equation}   \label{eq:originalbbp}
   \pi = \sum_{n = 0}^\infty \left[ \frac{1}{16^n} \left( \frac{4}{8n + 1} - \frac{2}{8n + 4} - \frac{1}{8n + 5} - \frac{1}{8n + 6} \right) \right]
 \end{equation}
 
-This style of equation is now known as a BBP-type formula.
+This style of equation is now known as a BBP-type formula after its inventors Bailey, Borwein and Plouffe.
 
-What the authors didn't know is that Leonhard Euler (1707-1783) discovered two BBP-type formulas which would have worked just as well as the formula that they spent a lot of computer time searching for.
+What the authors didn't know is that Leonhard Euler (1707-1783) discovered two BBP-type formulas which would have worked just as well as the formula for which they spent a lot of computer time searching.
 
-Euler's 1779 paper \emph{``De novo genere serierum rationalium et valde convergentium quibus ratio peripheriae ad diametrum exprimi potest''} \cite{E706latin} (E706) 
-has been translated by Jordan Bell with the English title \emph{``On a new type of rational and highly convergent series, by which the ratio of the circumference to the diameter is able to be expressed''} \cite{E706en} contains the formulas. If you wish to read more about the history of this paper then Ed Sandifer \cite{Sandifer} wrote a nice article about it.
+Euler's 1779 paper ``De novo genere serierum rationalium et valde convergentium quibus ratio peripheriae ad diametrum exprimi potest'' \cite{E706latin} (E706) 
+(as translated by Jordan Bell with the English title ``On a new type of rational and highly convergent series, by which the ratio of the circumference to the diameter is able to be expressed'') contains the formulas. Those who wish to read more about the history of this paper should consult Ed Sandifer's article \cite{Sandifer} from his ``How Euler Did It'' series.
 
-It isn't immediately obvious what the BBP-type formula is as Euler left the formula in expanded form:
+It isn't immediately obvious what the BBP-type formula is as Euler left it in expanded form:
 
 \begin{equation*}
   \pi = \left \{
@@ -81,15 +84,17 @@ It isn't immediately obvious what the BBP-type formula is as Euler left the form
   \right.
 \end{equation*}
 
-But in more compact notation it is this, where the similarities to equation~\eqref{eq:originalbbp} are immediately apparent.
+But in more compact notation it is this, where the similarities to equation~\eqref{eq:originalbbp} are immediately apparent:
 
 \begin{equation}  \label{eq:eulerbbp}
-  \pi = \sum_{n = 0}^\infty \left[ \frac{(-1)^n}{4^n} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
+  \pi = \sum_{n = 0}^\infty \left[ \frac{(-1)^n}{4^n} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right].
 \end{equation}
 
-This was independently discovered by Adamchik and Wagon \cite{Adamchik_Wagon_1997} in 1997.
+This was discovered independently by Adamchik and Wagon \cite{Adamchik_Wagon_1997} in 1997.
 
 Euler also produced this formula \footnote{Note that this equation is incorrect in the original paper and the translation - the bottom left term is printed as $1$ whereas it should be $\frac{1}{3}$ as shown here.}:
+
+\nopagebreak
 
 \begin{equation*}
   \pi = \left \{
@@ -114,7 +119,7 @@ Euler also produced this formula \footnote{Note that this equation is incorrect 
   \right.
 \end{equation*}
 
-This can be written like this with a bit of effort which will be described below.
+With a bit of effort (as will be described below) this can be rewritten as:
 
 \begin{equation}  \label{eq:eulerbbp2}
 \begin{split}
@@ -143,21 +148,21 @@ This can be written like this with a bit of effort which will be described below
     + \frac{1}{12n+11}
     + \frac{1}{20n+19}
     \end{aligned}
-  \right]
+  \right].
 \end{split}
 \end{equation}
 
-This is clearly a BBP-type formula and it was independently discovered by Pschill \cite{Arndt2001} in 1999.
+This is clearly a BBP-type formula and it was discovered independently by Pschill \cite{Arndt2001} in 1999.
 
 \section{Euler's Derivation of Equation (\ref{eq:eulerbbp})}
 
-Here is how Euler derived equation~\eqref{eq:eulerbbp} revised into modern notation. Starting from the observation $x^4 + 4 = (x^2 + 2x + x)(x^2 - 2x + x)$, Euler produced:
+Starting from the observation $v^4 + 4 = (v^2 + 2v + 2)(v^2 - 2v + 2)$, Euler observed:
 
 \begin{align}
-\int_0^x \frac{x^2 + 2x + x}{x^4 + 4} \,dx \label{eq:integral}
-&= \int_0^x \frac{dx}{x^2 - 2x + x} \\
-%&= \left[ \arctan{(1-x)} \right]_0^x \\
-&= \arctan{(1-x)} - \arctan{1} \\
+\int_0^x \frac{v^2 + 2v + 2}{v^4 + 4} \,dv \label{eq:integral}
+&= \int_0^x \frac{dv}{v^2 - 2v + 2} \\
+%&= \left[ -\arctan{(1-v)} \right]_0^x \\
+&= -\arctan{(1-x)} + \arctan{1} \\
 &= \arctan{\frac{x}{2-x}} \label{eq:rhs}
 \end{align}
 
@@ -170,38 +175,38 @@ Here is how Euler derived equation~\eqref{eq:eulerbbp} revised into modern notat
 %% Euler then produced
 
 %% \begin{align} \label{eq:rhs}
-%% \int_0^x \frac{x^2 + 2x + x}{x^4 + 4} \,dx
+%% \int_0^x \frac{x^2 + 2x + 2}{x^4 + 4} \,dx
 %% &= \arctan{\frac{x}{2-x}}
 %% \end{align}
 
 %% (Euler actually went straight from equation \eqref{eq:integral} to this result presumably using some previous knowledge.)
 
-Euler then went to work on the left hand side of this equation expanding $\frac{x^k}{x^4 + 4}$ where $k$ is an integer as an infinite series by polynomial division.)
+Euler then went to work on the left hand side of this equation by expanding $\frac{v^k}{v^4 + 4}$, where $k$ is an integer, as an infinite series by polynomial division.
 
 \begin{align}
-  \frac{x^k}{x^4 + 4}
-  &= \sum_{n = 0}^\infty (-1)^n \frac{x^{4n+k}}{4^{n+1}}
+  \frac{v^k}{v^4 + 4}
+  &= \sum_{n = 0}^\infty (-1)^n \frac{v^{4n+k}}{4^{n+1}}
 \end{align}
 
 Integrating this we get
 
 \begin{align}
-  \int_0^x \frac{x^k}{x^4 + 4} \, dx
-  &= \int_0^x \sum_{n = 0}^\infty (-1)^n \frac{x^{4n+k}}{4^{n+1}} \, dx \\
+  \int_0^x \frac{v^k}{v^4 + 4} \, dv
+  &= \int_0^x \sum_{n = 0}^\infty (-1)^n \frac{v^{4n+k}}{4^{n+1}} \, dv \\
   &= \sum_{n = 0}^\infty (-1)^n \frac{x^{4n+k+1}}{(4n+k+1)4^{n+1}}
 \end{align}
 
 We can now rewrite the LHS of equation~\eqref{eq:rhs} as
 
 \begin{align}
-  \int_0^x \frac{x^2 + 2x + x}{x^4 + 4} \,dx
-  &= \int_0^x \frac{x^2}{x^4 + 4} \,dx
-    + \int_0^x \frac{2x}{x^4 + 4} \,dx
-    + \int_0^x \frac{x}{x^4 + 4} \,dx \\
+  \int_0^x \frac{v^2 + 2v + 2}{v^4 + 4} \,dv
+  &= \int_0^x \frac{v^2}{v^4 + 4} \,dv
+    + \int_0^x \frac{2v}{v^4 + 4} \,dv
+    + \int_0^x \frac{2}{v^4 + 4} \,dv \\
   &= \sum_{n = 0}^\infty \frac{(-1)^n}{4^{n+1}} \left[ \label{eq:lhs}
-    \frac{2x^{4n+1}}{4n+1}
+      \frac{x^{4n+3}}{4n+3}
     + \frac{2x^{4n+2}}{4n+2}
-    + \frac{x^{4n+3}}{4n+3}
+    + \frac{2x^{4n+1}}{4n+1}
   \right]
 \end{align}
 
@@ -223,10 +228,10 @@ Euler then substituted $x = 1$ to produce $\arctan{1} = \frac{\pi}{4}$ to create
 Euler obviously realised that equation~\eqref{eq:arctanseries} had more to give in terms of $\pi$ generating sequences. Equation~\eqref{eq:eulerbbp} generates roughly 4 bits of $\pi$ or $1.2$ decimal digits per iteration. To do better he took this identity that was first discovered by Hutton \cite{Arndt2001} in 1776:
 
 \begin{equation}
-\pi = 8 \arctan{\tfrac{1}{3}} + 4 \arctan{\tfrac{1}{7}}
+\pi = 8 \arctan{\tfrac{1}{3}} + 4 \arctan{\tfrac{1}{7}}.
 \end{equation}
 
-He then used equation \eqref{eq:arctanseries} with $x=\frac{1}{2}$ and $x=\frac{1}{4}$ to give series for $\arctan{\frac{1}{3}}$ and $\arctan{\frac{1}{7}}$ respectively. Combining them Euler got.
+He then used equation \eqref{eq:arctanseries} with $x=\frac{1}{2}$ and $x=\frac{1}{4}$ to give series for $\arctan{\frac{1}{3}}$ and $\arctan{\frac{1}{7}}$, respectively. Combining them Euler got:
 
 \iffalse                        %commented working
 
@@ -262,13 +267,53 @@ Which with a bit of simplification becomes
     \frac{32}{4n+1}
     + \frac{8}{4n+2}
     + \frac{1}{4n+3}
-  \right]
+  \right].
 \end{aligned}
 \end{equation}
 
-This was as far as Euler went. You can clearly see it is a BBP-type formula, but it isn't in the form we expect to see yet.
+This was as far as Euler went. While we can clearly see it is a BBP-type formula, it isn't yet in the form we expect to see.
 
-To make it into the expected form, we can collect groups of terms (5 for the first sum, 3 for the second) to get a common multiplier of $\frac{(-1)^n}{2^{30n}}$ and lots of simplification later this becomes equation \eqref{eq:eulerbbp2}.
+To write this as a single BBP-type formula, we can collect groups of terms (five for the first sum, three for the second) to get a common multiplier of $\frac{(-1)^n}{2^{30n}}$.
+
+\begin{equation}
+\begin{split}
+  \pi
+  &= \frac{1}{4} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{8}{20n+1}
+    +  \frac{4}{20n+2}
+    +  \frac{1}{20n+3} \\
+    -& \frac{8.2^{-6}}{20n+5}
+    -  \frac{4.2^{-6}}{20n+6}
+    -  \frac{1.2^{-6}}{20n+7} \\
+    +& \frac{8.2^{-12}}{20n+9}
+    +  \frac{4.2^{-12}}{20n+10}
+    +  \frac{1.2^{-12}}{20n+11} \\
+    -& \frac{8.2^{-18}}{20n+13} 
+    -  \frac{4.2^{-18}}{20n+14}
+    -  \frac{1.2^{-18}}{20n+15} \\
+    +& \frac{8.2^{-24}}{20n+17}
+    +  \frac{4.2^{-24}}{20n+18}
+    +  \frac{1.2^{-24}}{20n+19} \\
+    \end{aligned}
+  \right] \\
+  &+ \frac{1}{64} \sum_{n = 0}^\infty \frac{(-1)^n}{2^{30n}} \left[
+    \begin{aligned}
+    &  \frac{32}{12n+1}
+    +  \frac{8}{12n+2}
+    +  \frac{1}{12n+3} \\
+    -& \frac{32.2^{-10}}{12n+5}
+    -  \frac{8.2^{-10}}{12n+6}
+    -  \frac{1.2^{-10}}{12n+7} \\
+    +& \frac{32.2^{-20}}{12n+9}
+    +  \frac{8.2^{-20}}{12n+10}
+    +  \frac{1.2^{-20}}{12n+11} \\
+    \end{aligned}
+  \right]
+\end{split}
+\end{equation}
+
+After much simplification, this becomes equation \eqref{eq:eulerbbp2}.
 
 \iffalse                        % working commented out
 
@@ -476,7 +521,7 @@ To make it into the expected form, we can collect groups of terms (5 for the fir
 
 \fi                             % working commented out
 
-This formula calculates 30 bits of $\pi$ per iteration or about 9 decimal places. For binary digit extraction purposes it is about $1.42\times$ faster than equation~\eqref{eq:originalbbp} as it calculates $30/21 = 1.42$ bits of $\pi$ per division as compared to $4/4 = 1$ bit of $\pi$ per division for the original equation.
+This formula calculates 30 bits of $\pi$ per iteration or about 9 decimal places. For binary digit extraction purposes it is about $1.42$ times faster than equation~\eqref{eq:originalbbp} as it calculates $30/21 = 1.42$ bits of $\pi$ per division as compared to $4/4 = 1$ bit of $\pi$ per division for the original equation.
 
 \section{Calculating binary digits of $\pi$}
 
@@ -485,40 +530,45 @@ The secret to calculating the $m$-th binary digit of $\pi$ without calculating t
 \begin{equation}
   2^m \pi = \left[
     \begin{aligned}
-      \sum_{n = 0}^{m/2} \left[ (-1)^n 2^{m-2n} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right] \\
-      + \sum_{n = m/2+1}^\infty \left[ \frac{(-1)^n}{2^{2n-m}} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
+      \sum_{n = 0}^{\lfloor m/2 \rfloor} \left[ (-1)^n 2^{m-2n} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right] \\
+      + \sum_{n = \lfloor m/2 \rfloor+1}^\infty \left[ \frac{(-1)^n}{2^{2n-m}} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
     \end{aligned}
     \right] \pmod 1
 \end{equation}
 
-The second half of this equation is easy to calculate as the absolute value of all terms is less than 1 and very quickly these will become so small that we don't need to worry about them. $p_f/2$ terms will be sufficient for a floating point number with precision $p_f$.
+The second half of this equation is easy to calculate as the absolute value of all terms is less than 1 and very quickly these will become so small that we don't need to worry about them. In general, $\lfloor p_f/2 \rfloor$ terms will be sufficient for a floating point number with precision $p_f$.
 
-The first half looks looks more difficult to calculate at first glance due to the large powers involved, however we can use modular arithmetic to calculate this as:
+The first half looks looks more difficult to calculate at first glance due to the large powers involved; however we can use modular arithmetic to calculate this as:
 
 \begin{equation}
   2^m \pi \approx \left[
     \begin{aligned}
-      &\sum_{n = 0}^{m/2} \left[ (-1)^n \left(
+      &\sum_{n = 0}^{\lfloor m/2 \rfloor} \left[ (-1)^n \left(
         \begin{aligned}
           && \frac{2^{m-2n+1} \pmod{4n + 1}}{4n + 1} \\
           &&+ \frac{2^{m-2n+1} \pmod{4n + 2}}{4n + 2} \\
           &&+ \frac{2^{m-2n} \pmod{4n + 3}}{4n + 3}
         \end{aligned}
         \right) \right] \\
-      &+ \sum_{n = m/2+1}^{m/2+p_f/2} \left[ \frac{(-1)^n}{4^{n-m}} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
+      &+ \sum_{n = \lfloor m/2 \rfloor+1}^{\lfloor m/2 \rfloor+\lfloor p_f/2 \rfloor} \left[ \frac{(-1)^n}{2^{2n-m}} \left( \frac{2}{4n + 1} + \frac{2}{4n + 2} + \frac{1}{4n + 3} \right) \right]
 \end{aligned}
-    \right] \pmod 1
+    \right] \pmod 1.
 \end{equation}
 
-All parts of this equation are now computable using normal floating point numbers of precision $p_f$ bits and integers of precision $p_i$ bits. $2^x \pmod k$ can easily be computed using only $O(\log{n})$ operations \cite{Knuth_1995} using an integer of sufficient size to hold $k$.
+All parts of this equation are now computable using fixed precision floating point numbers of precision $p_f$ bits and integers of precision $p_i$ bits; $2^x \pmod k$ can easily be computed using only $O(\log{n})$ operations \cite{Knuth_1995} using an integer of sufficient size to hold $k$.
 
-There are two limits to the accuracy of this equation. Firstly we need the maximum denominator to fit into $p_i$ bits this means that $4(m/2)+3 < 2^{p_i}$ so $m < 2^{p_i-1}-1.5$. Secondly each time we add a floating point number we will, on average, add half a bit of inaccuracy to the result. This equation needs 3 additions per iteration so our final computed result will only have accuracy approximately $p_f - \log_2{(3(m/2)/2)} = p_f - log_2(3m/4)$ bits.
+There are two limits to the accuracy of this equation. Firstly we need the maximum denominator to fit into $p_i$ bits this means that $4(m/2)+3 < 2^{p_i}$ so $m < 2^{p_i-1}-1.5$. Secondly each time we add a floating point number we will, on average, add half a bit of inaccuracy to the result. This equation needs 3 additions per iteration so our final computed result will only have accuracy approximately $p_f - \log_2{(3(m/2)/2)} = p_f - \log_2(3m/4)$ bits.
 
 \section{Computation}
 
-A program to calculate hex digits of $\pi$ was written based on equation~\eqref{eq:originalbbp}, \eqref{eq:eulerbbp} and \eqref{eq:eulerbbp2} using 64 bit integers ($p_i = 64$) and double precision floating point ($p_f = 53$). On the author's laptop this was the result of the computation showing the $10^{m}$-th hex digits of $\pi$ and the time it took to calculate them using each equation.
+A program to calculate hex digits of $\pi$ was written based on equation~\eqref{eq:originalbbp}, \eqref{eq:eulerbbp} and \eqref{eq:eulerbbp2} using 64 bit integers ($p_i = 64$) and double precision floating point ($p_f = 53$). Table~\ref{table:results} shows the result of the computation on the author's laptop.
+
+It can be seen in the table that Equation~\eqref{eq:eulerbbp2} is $1.42$ times faster than Equation~\eqref{eq:originalbbp} as expected, but Equation~\eqref{eq:eulerbbp} is $1.5$ times slower.
+
+The program which generated this table can be downloaded from the website for this article \cite{Github}.
 
 \begin{center}
+\begin{table}[htb]
   \begin{tabular}{|l|l|r|r|r|}
     \hline
 Digit & Hex Result & Equation~\eqref{eq:originalbbp} & Equation~\eqref{eq:eulerbbp} & Equation~\eqref{eq:eulerbbp2} \\ \hline
@@ -535,15 +585,13 @@ $10^{10}$ & \texttt{921C} & 12m56s & 19m38s & 8m53s \\
 $10^{11}$ & \texttt{C9C} & 2h28m &3h43m & 1h37m \\
     \hline
   \end{tabular}
+  \caption{\label{table:results}The $10^{m}$-th hex digits of $\pi$ and the calculation time for each equation.}
+\end{table}
 \end{center}
-
-It can be seen here that Equation~\eqref{eq:eulerbbp2} is $1.42\times$ faster than Equation~\eqref{eq:originalbbp} as expected, but Equation~\eqref{eq:eulerbbp} is $1.5\times$ slower.
-
-The program which generated this can be downloaded from the website for this article \cite{Github}.
 
 \section{Conclusion}
 
-Euler noted about equation~\eqref{eq:eulerbbp2} \emph{This occurs as most noteworthy, because all these series proceed only by powers of two.}, and it is indeed this property which enables its use as a binary digit extraction formula for $\pi$. Euler did not make the leap to note that this formula could be used for binary digit extraction - that was Bailey, Borwein and Plouffle's stroke of genius - but amazingly he did find two formulas of the right form 200 years earlier.
+Euler noted about equation~\eqref{eq:eulerbbp2}, ``This occurs as most noteworthy, because all these series proceed only by powers of two'' and it is indeed this property which enables its use as a binary digit extraction formula for $\pi$. Euler did not make the leap to note that this formula could be used for binary digit extraction --- that was Bailey, Borwein and Plouffe's stroke of genius --- but amazingly he did find two formulas of the right form 200 years earlier.
 
 \bibliographystyle{plain}
 \bibliography{refs} % References are in the refs.bib file

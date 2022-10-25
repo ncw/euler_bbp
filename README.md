@@ -1,9 +1,10 @@
 # Programs and paper to demonstrate Euler's BBP-type formulae for pi
 
-This repository contains a paper about Euler's BBP-type forumulae
-which can be used to compute binary digits from pi without calculating
-the previous digits and programs calculate pi using them.
+This repository contains a paper about Euler's BBP-type formulae which
+can be used to compute binary or hex digits from pi without
+calculating the previous digits and programs calculate pi using them.
 
+- `euler_bbp.pdf` - a paper describing the mathematics behind the calculations
 - `euler_bbp.py` - simple program to calculate hex digits of pi
 - `euler_bbp.go` - faster (100x) program to do the same
 - `check_bbp_equations.py` - program to check the equations in the paper work
